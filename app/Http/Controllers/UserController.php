@@ -27,7 +27,7 @@ class UserController extends Controller{
 		return $usuarios;
 	}
 
-    public function save(Request $input){
+    public function createUser(Request $input){
     	if($input->has('first_name')){
             /*
             $us = User::where('emai', $input['emai'])->get();
@@ -37,6 +37,7 @@ class UserController extends Controller{
 	    	$input = Input::all();
 	    	$input['password'] = Hash::make($input['password']);
 	    	$user = new User();
+            $user['admin'] = 1;
 	    	$user->fill($input);
 	    	//$user->api_token = str_random(60);
         	$user->save();
@@ -72,13 +73,29 @@ class UserController extends Controller{
     public function login(Request $request){
 		if (auth()->attempt(['email' => $request->input('email'), 'password' => $request->input('password')])){
         $user = auth()->user();
-       	//$user->api_token = str_random(60);
-        $user->save();
-
-        return response()-> json($user->id);
+        if ($user->admin == 0) {
+            $user->save();
+            return response()->json($user->admin);
+        }
+        else{
+            $user->save();
+            return response()-> json($user->id);
+        }
     }
     return response()->json([
         'error' => 'Usuario não cadastrado!',
         'code' => 401], 401);
 	}
+
+    public function createAdmin(Request $input){
+        if($input->has('first_name')){
+            $input = Input::all();
+            $input['password'] = Hash::make($input['password']);
+            $user = new User();
+            $user['admin'] = 0;
+            $user->fill($input);
+            $user->save();
+            return response()->json('Admin cadastrado!!');
+        }
+    }
 }

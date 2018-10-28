@@ -21,11 +21,13 @@ Route::get('/verifica-vagas-user/{id}', 'VacanciesController@verificaVagasUser')
 Route::get('/verifica-vagas', 'VacanciesController@verificaVagas');
 
 //Metodos POST
-Route::post('/cadastrar', 'UserController@save');
+Route::post('/cadastrar', 'UserController@createUser');
 Route::post('/login', 'UserController@login');
 Route::post('/reservar-vagas/{id}/{id_user}', 'VacanciesController@reservarVagas');
 Route::post('/cancelar-vagas/{id}/{id_user}', 'VacanciesController@cancelarVagas');
 Route::post('/cadastrar-vagas', 'VacanciesController@cadastrarVagas');
+Route::post('/cadastrar-admin', 'UserController@createAdmin');
+
 
 //Metodos DELETE
 Route::delete('/delete/{id}', 'UserController@delete');
